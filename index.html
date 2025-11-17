@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PunKumayo — Chocolates Artesanales (PRO)</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#2b0f07;     /* dark chocolate */
+    --bg2:#4b1f12;     /* milk chocolate */
+    --accent:#f6c66a;  /* caramel */
+    --cream:#f8efe3;
+    --card:#3b1b12;
+    --glass: rgba(255,255,255,0.06);
+    --muted: rgba(255,255,255,0.75);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Roboto,system-ui,Arial;background:
+    radial-gradient(1000px 600px at 10% 10%, rgba(255,255,255,0.02), transparent),
+    radial-gradient(900px 500px at 90% 90%, rgba(0,0,0,0.12), transparent),
+    linear-gradient(120deg,var(--bg1), var(--bg2)); color:var(--cream); -webkit-font-smoothing:antialiased; overflow-x:hidden;}
+
+  /* animated background "melting" */
+  .bg-animate{
+    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  }
+  .blob{
+    position:absolute; width:700px; height:700px; border-radius:50%;
+    filter: blur(80px) saturate(120%);
+    opacity:0.22; transform-origin:center;
+    animation:float 14s ease-in-out infinite;
+  }
+  .b1{left:-220px; top:-180px; background:linear-gradient(135deg,#4a1c0f,#6b2a12);}
+  .b2{right:-200px; bottom:-140px; background:linear-gradient(135deg,#5a2e15,#8a4a1b); animation-duration:18s}
+  .b3{left:40%; top:20%; background:linear-gradient(135deg,#2f1a10,#5b331f); width:520px;height:520px; animation-duration:20s; opacity:0.12}
+
+  @keyframes float{
+    0% {transform:translateY(0) scale(1);}
+    50%{transform:translateY(-40px) scale(1.03);}
+    100%{transform:translateY(0) scale(1);}
+  }
+
+  header{position:relative; z-index:3; padding:22px 18px; display:flex; gap:18px; align-items:center; justify-content:space-between; max-width:1200px; margin:0 auto;}
+  .brand{display:flex; gap:14px; align-items:center;}
+  .logo{
+    width:78px; height:78px; border-radius:16px; background:linear-gradient(160deg,#2b0e08,#6b2d18);
+    display:flex;align-items:center;justify-content:center; box-shadow:0 6px 20px rgba(0,0,0,0.4);
+    border:2px solid rgba(255,255,255,0.04);
+  }
+  .logo svg{width:56px;height:56px}
+  h1{font-family:Pacifico, cursive; font-size:28px; margin:0; letter-spacing:0.6px; color:var(--accent); text-shadow: 0 4px 18px rgba(0,0,0,0.6);}
+  .tag{font-size:13px; color:var(--muted); margin-top:4px}
+
+  nav{display:flex; gap:12px; align-items:center;}
+  .btn{background:var(--glass); color:var(--cream); padding:10px 14px; border-radius:12px; text-decoration:none; font-weight:600; font-size:14px; border:1px solid rgba(255,255,255,0.03); cursor:pointer}
+  .btn-primary{background:linear-gradient(90deg,#c96f2a,#ffb86b); color:#2b0f07; box-shadow:0 6px 20px rgba(203,93,26,0.18); border:0}
+
+  main{max-width:1200px; margin:14px auto; padding:20px; position:relative; z-index:2;}
+  .hero{
+    display:grid; grid-template-columns: 1fr 420px; gap:24px; align-items:center; margin-top:8px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:22px; border-radius:18px; box-shadow: 0 10px 40px rgba(3,3,3,0.35);
+    border:1px solid rgba(255,255,255,0.03);
+  }
+  .hero-left h2{font-size:34px; margin:0 0 8px 0; color:var(--accent); position:relative; padding-left:36px}
+  /* cacaocitos decorative left of hero title */
+  .hero-left h2::before{
+    content:'';
+    position:absolute; left:6px; top:6px; width:28px; height:28px; background:
+      radial-gradient(circle at 30% 30%, #f6c66a 0 10%, transparent 11%),
+      radial-gradient(circle at 70% 70%, #8b4a2a 0 12%, transparent 13%);
+    border-radius:50%; filter:drop-shadow(0 6px 10px rgba(0,0,0,0.4));
+  }
+  .hero-left p{margin:0 0 16px 0; color:rgba(255,255,255,0.95); font-weight:300}
+  .cta-row{display:flex; gap:12px; align-items:center; margin-top:6px}
+
+  /* product cards */
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-top:20px;}
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+    border-radius:14px; padding:16px; position:relative; overflow:hidden; border:1px solid rgba(255,255,255,0.03);
+    transition:transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s;
+    cursor:pointer;
+  }
+  .card:hover{transform:translateY(-8px); box-shadow:0 18px 50px rgba(0,0,0,0.5)}
+  .product-image{height:160px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg,#4b2313,#2f1108); margin-bottom:12px; position:relative;}
+  .product-image svg{width:120px; height:120px; filter:drop-shadow(0 8px 22px rgba(0,0,0,0.6))}
+  .name{font-weight:800; font-size:18px; margin-bottom:6px}
+  .desc{font-size:13px; opacity:0.95; margin-bottom:8px}
+  .price{font-weight:900; color:var(--accent); font-size:15px}
+  .ingredients{font-size:13px; color: #f7e6c8; background:rgba(0,0,0,0.05); padding:8px; border-radius:8px; margin-top:10px; font-weight:500}
+
+  .meta-row{display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:10px}
+  .badge{background:rgba(255,255,255,0.04); padding:6px 8px; border-radius:10px; font-size:13px}
+
+  /* chocolate drops animation */
+  .drops-layer{position:absolute; inset:0; pointer-events:none; z-index:1;}
+  .drop{
+    position:absolute; width:30px; height:40px; background:linear-gradient(180deg,#4b2b18,#2a1309); border-radius:15px 15px 18px 18px;
+    transform-origin:center top; animation:fall linear infinite;
+    box-shadow: inset 0 -6px 14px rgba(255,255,255,0.03), 0 8px 18px rgba(0,0,0,0.45);
+  }
+
+  @keyframes fall {
+    0%{ transform: translateY(-30vh) rotate(0deg); opacity:0 }
+    10%{ opacity:0.9 }
+    80%{ opacity:0.95 }
+    100%{ transform: translateY(140vh) rotate(180deg); opacity:0.0 }
+  }
+
+  /* footer / promo */
+  footer{max-width:1200px;margin:22px auto;color:rgba(255,255,255,0.9); display:flex; gap:12px; align-items:center; justify-content:space-between; padding:14px;}
+  .promo{background:linear-gradient(90deg,#2f1108,#5b2b16); padding:12px 16px; border-radius:12px; border:1px solid rgba(255,255,255,0.04);}
+  .small{font-size:13px; opacity:0.9}
+
+  /* music toggle */
+  .music-toggle{display:flex; gap:10px; align-items:center}
+  .switch{
+    width:44px;height:26px;background:rgba(255,255,255,0.08); border-radius:999px; position:relative; padding:3px; cursor:pointer;
+    border:1px solid rgba(255,255,255,0.04);
+  }
+  .knob{width:20px;height:20px;background:white;border-radius:999px; transform:translateX(0); transition:all .28s ease; box-shadow:0 4px 12px rgba(0,0,0,0.35)}
+  .switch.on{background:linear-gradient(90deg,#ffd08a,#ff9f4a)} .switch.on .knob{transform:translateX(18px)}
+
+  /* cart badge */
+  .cart-btn{position:relative}
+  .cart-count{
+    position:absolute; right:-8px; top:-8px; background:#ff5a5a; color:white; font-weight:800; font-size:12px;
+    padding:4px 8px; border-radius:999px; box-shadow:0 6px 16px rgba(0,0,0,0.35)
+  }
+
+  /* modal cart */
+  .modal-backdrop{position:fixed; inset:0; background:rgba(0,0,0,0.6); display:none; align-items:center; justify-content:center; z-index:9998}
+  .modal{width:92%; max-width:720px; background:linear-gradient(180deg,#3b1b12,#24100a); border-radius:12px; padding:18px; color:var(--cream); box-shadow:0 20px 60px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.04)}
+  .cart-items{max-height:340px; overflow:auto; margin-top:8px}
+  .cart-item{display:flex; gap:12px; align-items:center; padding:8px 4px; border-bottom:1px solid rgba(255,255,255,0.03)}
+  .qty-controls{display:flex; gap:6px; align-items:center}
+  .small-btn{background:rgba(255,255,255,0.06); padding:6px 8px; border-radius:8px; cursor:pointer; border:0; color:var(--cream)}
+
+  /* responsive */
+  @media(max-width:880px){ .hero{grid-template-columns:1fr; padding:16px} header{padding:16px} .brand h1{font-size:22px} .logo{width:64px;height:64px} .modal{max-width:94%} }
+
+  /* sparkle small */
+  .sparkle{position:absolute; right:12px; top:12px; font-size:12px; background:rgba(255,255,255,0.04); padding:6px 8px; border-radius:10px; color:var(--accent)}
+
+  /* loyalty toast */
+  .toast{position:fixed; right:12px; bottom:12px; background:linear-gradient(90deg,#ffb86b,#ffd08a); color:#2b0f07; padding:12px 16px; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.4); display:none; z-index:9999}
+</style>
+</head>
+<body>
+
+<div class="bg-animate" aria-hidden="true">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<header>
+  <div class="brand">
+    <div class="logo" aria-hidden="true">
+      <!-- SVG cacao icon -->
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="logo cacao">
+        <circle cx="32" cy="32" r="30" fill="#3b160d"/>
+        <path d="M32 12c6 4 10 11 10 20 0 8-4 14-10 16-6-2-10-8-10-16 0-9 4-16 10-20z" fill="#c9864c"/>
+        <path d="M32 12c-6 4-10 11-10 20 0 8 4 14 10 16" fill="#8b4a2a" opacity="0.45"/>
+      </svg>
+    </div>
+    <div>
+      <h1>PunKumayo</h1>
+      <div class="tag">Chocolates y pastas artesanales de cacao — Hecho con amor</div>
+    </div>
+  </div>
+
+  <nav>
+    <button class="btn" onclick="document.getElementById('productos').scrollIntoView({behavior:'smooth'})">Productos</button>
+    <button class="btn" onclick="document.getElementById('promos').scrollIntoView({behavior:'smooth'})">Promos</button>
+    <div style="display:flex; gap:8px; align-items:center">
+      <div class="music-toggle" title="Reproducir/pausar música">
+        <div id="switch" class="switch" aria-label="toggle music">
+          <div class="knob"></div>
+        </div>
+      </div>
+
+      <button id="cartOpen" class="btn cart-btn" aria-label="Abrir carrito">
+        🛒 Carrito
+        <span id="cartCount" class="cart-count" style="display:none">0</span>
+      </button>
+
+      <a class="btn btn-primary" href="https://wa.me/51900042892" target="_blank" rel="noopener">Contactar (WhatsApp)</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="top">
+    <div class="hero-left">
+      <h2>Chocolate artesanal que abraza el alma 🍫</h2>
+      <p>Texturas cremosas, crocantes y sabores intensos — hechas con cacao selecto. Promos por compra repetida y regalito por TikTok.</p>
+
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="document.getElementById('productos').scrollIntoView({behavior:'smooth'})">Ver productos</button>
+        <a class="btn" href="https://wa.me/51900042892" target="_blank">Pedir por WhatsApp</a>
+      </div>
+
+      <div style="margin-top:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <div style="font-size:13px; opacity:0.95; margin-left:0px">
+          Síguenos en TikTok comparte y comenta:  <strong>@mochilandia6719</strong> — manda captura y gana una barra extra.
+        </div>
+      </div>
+
+      <div class="sparkle">Promo: compra 12+ y paga S/5.50 la unidad en chocolates seleccionados</div>
+    </div>
+
+    <aside style="position:relative;">
+      <!-- decorative chocolate bar + ingredients -->
+      <div style="border-radius:14px; padding:16px; background:linear-gradient(180deg,#3b1b12,#24100a); width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.5)">
+        <svg viewBox="0 0 220 160" width="100%" style="display:block; margin-bottom:10px; border-radius:10px;">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#9b4f2b"/><stop offset="1" stop-color="#3b1b12"/></linearGradient>
+          </defs>
+          <rect x="6" y="18" rx="12" ry="12" width="208" height="120" fill="url(#g1)" />
+          <!-- chocolate squares -->
+          <g transform="translate(14,28)" fill="#6b2d18">
+            <rect x="0" y="0" width="48" height="40" rx="6"></rect>
+            <rect x="56" y="0" width="48" height="40" rx="6"></rect>
+            <rect x="112" y="0" width="48" height="40" rx="6"></rect>
+            <rect x="168" y="0" width="36" height="40" rx="6"></rect>
+
+            <rect x="0" y="48" width="48" height="40" rx="6"></rect>
+            <rect x="56" y="48" width="48" height="40" rx="6"></rect>
+            <rect x="112" y="48" width="48" height="40" rx="6"></rect>
+            <rect x="168" y="48" width="36" height="40" rx="6"></rect>
+          </g>
+        </svg>
+
+        <div style="color:var(--accent); font-weight:800; font-size:16px; margin-bottom:6px">Promoción de bienvenida</div>
+        <div style="font-size:14px; color:rgba(255,255,255,0.9)">Síguenos en TikTok, comenta y manda captura por WhatsApp. ¡Te agregamos 1 barra gratis a tu pedido (valida con captura)!</div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- Productos -->
+  <section id="productos" style="margin-top:18px; position:relative">
+    <h2 style="color:var(--accent); margin:6px 0 8px 0; position:relative; padding-left:36px">
+      Nuestros productos
+      <!-- small cacao icon near title -->
+      <span style="position:absolute; left:6px; top:6px; width:28px; height:28px; display:inline-block; border-radius:50%;
+        background: radial-gradient(circle at 30% 30%, #f6c66a 0 10%, transparent 11%), radial-gradient(circle at 70% 70%, #8b4a2a 0 12%, transparent 13%);"></span>
+    </h2>
+
+    <div class="grid" id="productGrid"></div>
+  </section>
+
+  <!-- drops layer -->
+  <div class="drops-layer" id="drops"></div>
+
+  <!-- Promos -->
+  <section id="promos" style="margin-top:20px;">
+    <h2 style="color:var(--accent); margin:6px 0 8px 0">Promociones y fidelidad</h2>
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <div class="promo">
+        <div style="font-weight:700">Programa de fidelidad</div>
+        <div class="small">Por cada 3 pedidos completados, una barra gratis. Guardamos tu número de WhatsApp para acumular.</div>
+      </div>
+
+      <div class="promo">
+        <div style="font-weight:700">Promo TikTok</div>
+        <div class="small">Síguenos y comenta en @mochilandia6719. Envía captura por WhatsApp al 900042892 y presiona "Validar TikTok" en el carrito para recibir 1 barra adicional en tu próximo pedido.</div>
+      </div>
+
+      <div class="promo">
+        <div style="font-weight:700">Descuento por mayor</div>
+        <div class="small">12 unidades o más en productos con tag "mayor" → S/ 5.50 por unidad.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>
+    <div style="font-weight:800">PunKumayo</div>
+    <div style="font-size:13px; opacity:0.9">Contacto: 900042892 — Midardo Gutiérrez Gamboa</div>
+    <div style="font-size:13px; opacity:0.9">TikTok: @mochilandia6719</div>
+  </div>
+
+  <div style="display:flex; gap:8px; align-items:center;">
+    <a class="btn" href="https://wa.me/51900042892" target="_blank">Pedir</a>
+    <a class="btn" href="#top">Arriba</a>
+  </div>
+</footer>
+
+<!-- modal carrito -->
+<div id="modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="modal" role="document">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-weight:900; font-size:18px">Tu carrito</div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button id="tiktokValidate" class="small-btn" title="Valida tu captura de TikTok para la barra gratis">Validar TikTok</button>
+        <button id="closeModal" class="small-btn">Cerrar</button>
+      </div>
+    </div>
+
+    <div class="cart-items" id="cartItems" aria-live="polite"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px">
+      <div>
+        <div style="font-size:13px; opacity:0.9">Alérgenos: maní, leche, soya (revisa ingredientes en cada producto).</div>
+        <div style="font-size:13px; opacity:0.9; margin-top:6px">Promos aplicadas automáticamente (mayor, fidelidad, TikTok).</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:800; font-size:18px">Total: <span id="cartTotal">S/ 0.00</span></div>
+        <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:8px">
+          <button id="clearCart" class="small-btn">Vaciar</button>
+          <button id="placeOrder" class="btn btn-primary">Pedir por WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- audio (user can change src to own music file or stream) -->
+<audio id="bgMusic" loop preload="none">
+  <!-- Reemplaza el src por la ruta de tu archivo de música (mp3/ogg). Si no pones src no se reproducirá. -->
+  <!-- Ejemplo: <source src="audio/ambiente.mp3" type="audio/mpeg"> -->
+</audio>
+
+<!-- loyalty toast -->
+<div id="toast" class="toast"></div>
+
+<!-- allergen small fixed -->
+<div id="allergen" style="position:fixed; left:12px; bottom:12px; background:rgba(0,0,0,0.5); padding:10px 12px; border-radius:10px; font-size:13px; z-index:9999; color:var(--cream)">
+  Alérgenos: algunos productos contienen maní, leche y soya. Si eres alérgico, evita.
+</div>
+
+<script>
+/* ====== Product catalog ======
+  Each product: id, slug, name, desc, price, bulkQty (if eligible for mayor), bulkPrice, ingredients, tags
+*/
+const PRODUCTS = [
+  {id: 'maní', name:'Chocolate con Maní', desc:'Cremoso y crocante, hecho con cacao selecto y maní tostado.', price:6.00, bulkQty:12, bulkPrice:5.5, ingredients:'cacao, azúcar, manteca de cacao, leche en polvo, maní tostado', tags:['mayor']},
+  {id: 'leche', name:'Chocolate con Leche', desc:'Suave y dulce, con textura aterciopelada para los clásicos.', price:6.00, bulkQty:12, bulkPrice:5.5, ingredients:'cacao, azúcar, manteca de cacao, leche entera en polvo', tags:['mayor']},
+  {id: 'pasta', name:'Pasta de Cacao (250g)', desc:'Pasta pura para chocolatada y desayunos — sabor intenso.', price:18.00, bulkQty:null, bulkPrice:null, ingredients:'nibs de cacao al 100%'},
+  {id: 'barra', name:'Barra Energética', desc:'Con maní, nibs y miel — ideal para el día a día.', price:7.00, bulkQty:null, bulkPrice:null, ingredients:'cacao, maní, miel, azúcar, manteca de cacao'},
+  {id: 'bitter', name:'Chocolate Bitter 70%', desc:'Amargo, complejo y con notas frutales. Ideal para paladares intensos.', price:7.00, bulkQty:6, bulkPrice:6.5, ingredients:'cacao, azúcar, manteca de cacao', tags:['mayor']},
+  {id: 'arándanos', name:'Chocolate con Arándanos', desc:'Dulce-tostado con trozos de arándano deshidratado.', price:6.50, bulkQty:12, bulkPrice:5.5, ingredients:'cacao, azúcar, manteca de cacao, arándanos deshidratados', tags:['mayor']},
+  {id: 'soya', name:'Chocolate con Soya (Vegano)', desc:'Barra vegana hecha con leche de soya y nibs — sin lácteos.', price:6.50, bulkQty:12, bulkPrice:5.5, ingredients:'cacao, azúcar, manteca de cacao, lecitina de soya (sin lácteos)', tags:['vegano','mayor']}
+];
+
+/* ====== Render products to grid ====== */
+const productGrid = document.getElementById('productGrid');
+
+function createProductCard(p){
+  const art = document.createElement('article');
+  art.className = 'card';
+  art.setAttribute('data-id', p.id);
+
+  art.innerHTML = `
+    <div class="product-image" aria-hidden="true">
+      <!-- simple decorative svg per product (color accents) -->
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="120" height="120" rx="12" fill="transparent"/>
+        <g transform="translate(8,8)">
+          <rect x="6" y="6" rx="12" width="100" height="100" fill="#7a3f2a"/>
+        </g>
+      </svg>
+    </div>
+    <div class="name">${p.name}${p.tags && p.tags.includes('vegano') ? ' 🌱' : ''}</div>
+    <div class="desc">${p.desc}</div>
+    <div class="price">S/ ${p.price.toFixed(2)} ${p.bulkQty ? `— S/ ${p.bulkPrice.toFixed(2)} (${p.bulkQty}+ )` : ''}</div>
+    <div class="ingredients">Ingredientes: ${p.ingredients}</div>
+    <div class="meta-row">
+      <div class="badge">${p.tags && p.tags.includes('mayor') ? 'Precio por mayor disponible' : 'Producto artesanal'}</div>
+      <div>
+        <button class="btn add-to-cart" data-id="${p.id}">Agregar</button>
+      </div>
+    </div>
+  `;
+  return art;
+}
+
+PRODUCTS.forEach(p => productGrid.appendChild(createProductCard(p)));
+
+/* ====== Drops generator (chocolate drops) ====== */
+const dropsContainer = document.getElementById('drops');
+function rand(min,max){ return Math.random()*(max-min)+min }
+const viewportW = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+const dropCount = Math.min(28, Math.floor(viewportW / 36));
+
+for(let i=0;i<dropCount;i++){
+  const d = document.createElement('div');
+  d.className = 'drop';
+  const size = Math.round(rand(18,44));
+  d.style.width = size + 'px';
+  d.style.height = Math.round(size*1.2) + 'px';
+  d.style.left = Math.round(rand(-6, 100)) + '%';
+  d.style.top = Math.round(rand(-20, 10)) + '%';
+  const duration = rand(5.5, 12.5);
+  const delay = rand(-12, 0);
+  d.style.animationDuration = duration + 's';
+  d.style.animationDelay = delay + 's';
+  d.style.borderRadius = Math.round(size/2) + 'px ' + Math.round(size/2) + 'px ' + Math.round(size/2+6) + 'px ' + Math.round(size/2+6) + 'px';
+  d.style.opacity = rand(0.25,0.9);
+  d.style.transform = 'translateY(-20vh)';
+  dropsContainer.appendChild(d);
+}
+
+/* ====== Cart logic ====== */
+let CART = JSON.parse(localStorage.getItem('pk_cart_v1') || '[]'); // {id, qty}
+let fidelityOrders = parseInt(localStorage.getItem('pk_orders_v1') || '0',10);
+let tiktokValidated = localStorage.getItem('pk_tiktok_validated') === 'true';
+
+const cartCountEl = document.getElementById('cartCount');
+const cartItemsEl = document.getElementById('cartItems');
+const cartTotalEl = document.getElementById('cartTotal');
+const modal = document.getElementById('modal');
+const toast = document.getElementById('toast');
+
+function saveCart(){ localStorage.setItem('pk_cart_v1', JSON.stringify(CART)); }
+function findProduct(id){ return PRODUCTS.find(p=>p.id === id); }
+
+function updateCartBadge(){
+  const totalItems = CART.reduce((s,i)=>s+i.qty,0);
+  if(totalItems>0){ cartCountEl.style.display='inline-block'; cartCountEl.textContent = totalItems; } else { cartCountEl.style.display='none'; }
+}
+
+function calcItemPrice(item){
+  const p = findProduct(item.id);
+  if(!p) return 0;
+  // if product has bulk and qty >= bulkQty -> bulkPrice applies
+  if(p.bulkQty && item.qty >= p.bulkQty){
+    return p.bulkPrice * item.qty;
+  }
+  // else normal price
+  return p.price * item.qty;
+}
+
+function calcCartTotal(){
+  let total = 0;
+  CART.forEach(it => total += calcItemPrice(it));
+  // loyalty: if fidelityOrders % 3 == 2 then next order will give free bar when placed; but free bar must be added on place order
+  return total;
+}
+
+function renderCart(){
+  cartItemsEl.innerHTML = '';
+  if(CART.length === 0){
+    cartItemsEl.innerHTML = `<div style="padding:20px; text-align:center; opacity:0.9">Tu carrito está vacío. Agrega productos para empezar 😋</div>`;
+  } else {
+    CART.forEach(it => {
+      const p = findProduct(it.id);
+      if(!p) return;
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <div style="flex:1">
+          <div style="font-weight:800">${p.name}${p.tags && p.tags.includes('vegano') ? ' 🌱' : ''}</div>
+          <div style="font-size:13px; opacity:0.9">${p.desc}</div>
+          <div style="margin-top:6px; font-weight:800">S/ ${( (p.bulkQty && it.qty >= p.bulkQty) ? p.bulkPrice.toFixed(2) : p.price.toFixed(2) )} x ${it.qty} = S/ ${calcItemPrice(it).toFixed(2)}</div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px">
+          <div class="qty-controls">
+            <button class="small-btn qty-decr" data-id="${it.id}">−</button>
+            <div style="min-width:30px; text-align:center">${it.qty}</div>
+            <button class="small-btn qty-incr" data-id="${it.id}">+</button>
+          </div>
+          <button class="small-btn remove-item" data-id="${it.id}">Eliminar</button>
+        </div>
+      `;
+      cartItemsEl.appendChild(div);
+    });
+  }
+  cartTotalEl.textContent = 'S/ ' + calcCartTotal().toFixed(2);
+  updateCartBadge();
+}
+
+/* add to cart */
+document.querySelectorAll('.add-to-cart').forEach(btn=>{
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const id = btn.dataset.id;
+    addToCart(id, 1, true);
+  });
+});
+
+/* addToCart with optional visual fly animation */
+function addToCart(id, qty=1, animate=true){
+  const existing = CART.find(c=>c.id===id);
+  if(existing) existing.qty += qty;
+  else CART.push({id, qty});
+  saveCart();
+  renderCart();
+  if(animate) flyToCart(id);
+}
+
+/* fly animation (clone element) */
+function flyToCart(id){
+  const btn = document.querySelector(`.card[data-id="${id}"] .product-image`);
+  const cartBtn = document.getElementById('cartOpen');
+  if(!btn) return;
+  const rect = btn.getBoundingClientRect();
+  const cartRect = cartBtn.getBoundingClientRect();
+  const clone = btn.cloneNode(true);
+  clone.style.position='fixed';
+  clone.style.left = rect.left + 'px';
+  clone.style.top = rect.top + 'px';
+  clone.style.width = rect.width + 'px';
+  clone.style.height = rect.height + 'px';
+  clone.style.transition = 'transform 800ms cubic-bezier(.2,.8,.2,1), opacity 800ms';
+  clone.style.zIndex = 9999;
+  document.body.appendChild(clone);
+  requestAnimationFrame(()=>{
+    clone.style.transform = `translate(${cartRect.left-rect.left}px, ${cartRect.top-rect.top}px) scale(0.12)`;
+    clone.style.opacity = '0.3';
+  });
+  setTimeout(()=> clone.remove(), 900);
+}
+
+/* qty controls & remove */
+cartItemsEl.addEventListener('click', (e)=>{
+  if(e.target.classList.contains('qty-decr')){
+    const id = e.target.dataset.id;
+    const it = CART.find(c=>c.id===id);
+    if(it){ it.qty = Math.max(1, it.qty-1); saveCart(); renderCart(); }
+  } else if(e.target.classList.contains('qty-incr')){
+    const id = e.target.dataset.id;
+    const it = CART.find(c=>c.id===id);
+    if(it){ it.qty += 1; saveCart(); renderCart(); }
+  } else if(e.target.classList.contains('remove-item')){
+    const id = e.target.dataset.id;
+    CART = CART.filter(c=>c.id!==id);
+    saveCart();
+    renderCart();
+  }
+});
+
+/* open/close modal */
+const cartOpenBtn = document.getElementById('cartOpen');
+const closeModalBtn = document.getElementById('closeModal');
+cartOpenBtn.addEventListener('click', ()=>{ modal.style.display='flex'; modal.setAttribute('aria-hidden','false'); renderCart(); });
+closeModalBtn.addEventListener('click', ()=>{ modal.style.display='none'; modal.setAttribute('aria-hidden','true'); });
+
+/* clear cart */
+document.getElementById('clearCart').addEventListener('click', ()=>{
+  CART = []; saveCart(); renderCart();
+});
+
+/* TikTok validate: user presses and we set localStorage flag (they must have sent screenshot to WhatsApp manually) */
+document.getElementById('tiktokValidate').addEventListener('click', ()=>{
+  // Simple local validation: ask user to confirm they sent screenshot
+  const ok = confirm('¿Ya enviaste la captura a nuestro WhatsApp 900042892? (si ya la enviaste, presiona Aceptar para validar y recibir 1 barra extra en tu próximo pedido)');
+  if(ok){
+    tiktokValidated = true;
+    localStorage.setItem('pk_tiktok_validated','true');
+    showToast('¡Listo! Promo TikTok validada. Se aplicará 1 barra gratis en tu próximo pedido.');
+  }
+});
+
+/* place order => open WhatsApp with message, increase fidelity count, apply free bar if applicable */
+document.getElementById('placeOrder').addEventListener('click', ()=>{
+  if(CART.length === 0){ alert('Tu carrito está vacío. Agrega productos antes de pedir.'); return; }
+
+  // apply automatic free bar for TikTok or fidelity
+  const freeBarId = 'barra';
+  let freeBarAdded = false;
+
+  // If user validated tiktok and hasn't used it yet, add a free barra item
+  if(tiktokValidated){
+    // add 1 free barra (only once) — record usage by clearing flag
+    addFreeBarOnceFor('tiktok');
+    freeBarAdded = true;
+  }
+
+  // fidelity: if after this order the count reaches %3 == 0 -> add free bar
+  // We'll increment orders after placing; but if fidelityOrders % 3 == 2 then this order is the 3rd
+  if((fidelityOrders % 3) === 2){ // next order gives free bar
+    addToCart(freeBarId, 1, false);
+    freeBarAdded = true;
+    showToast('¡Felicidades! Tienes una barra gratis por fidelidad (3 pedidos). Se añadió al carrito.');
+  }
+
+  // Re-render to update total & items
+  renderCart();
+
+  // Build WhatsApp message
+  let lines = [];
+  lines.push('Hola PunKumayo 👋, quisiera hacer el siguiente pedido:');
+  CART.forEach(it=>{
+    const p = findProduct(it.id);
+    if(p){
+      lines.push(`- ${it.qty} x ${p.name} (S/ ${( (p.bulkQty && it.qty >= p.bulkQty) ? p.bulkPrice.toFixed(2) : p.price.toFixed(2) ) } c/u)`);
+    }
+  });
+  lines.push('');
+  lines.push(`Total: S/ ${calcCartTotal().toFixed(2)}`);
+  if(freeBarAdded) lines.push('(Incluye barra(s) gratis por promo)');
+  lines.push('');
+  lines.push('Datos para entrega:');
+  lines.push('Nombre:');
+  lines.push('Dirección:');
+  lines.push('Teléfono (WhatsApp):');
+
+  const waNumber = '51900042892';
+  const waUrl = `https://wa.me/${waNumber}?text=` + encodeURIComponent(lines.join('\n'));
+
+  // increment fidelityOrders
+  fidelityOrders = fidelityOrders + 1;
+  localStorage.setItem('pk_orders_v1', String(fidelityOrders));
+
+  // clear cart after sending (but keep tiktokValidated as false if used)
+  // Open WhatsApp in new tab
+  window.open(waUrl, '_blank');
+
+  // After opening, we clear cart and persist
+  CART = [];
+  saveCart();
+  renderCart();
+
+  // If tiktok promo used, clear it so user can't reuse
+  if(tiktokValidated){
+    tiktokValidated = false;
+    localStorage.removeItem('pk_tiktok_validated');
+  }
+
+  showToast('Pedido iniciado vía WhatsApp. ¡Gracias! Tu pedido se guardó como completado para fidelidad.');
+});
+
+/* helper: add free bar only once for tiktok */
+function addFreeBarOnceFor(source){
+  // ensure we only add a free bar once (if not already in cart)
+  const found = CART.find(c=>c.id === 'barra');
+  if(found) return;
+  CART.push({id:'barra', qty:1});
+  saveCart();
+  renderCart();
+  // consume tiktok validation
+  tiktokValidated = false;
+  localStorage.removeItem('pk_tiktok_validated');
+}
+
+/* toast */
+function showToast(text, ms=4200){
+  toast.textContent = text;
+  toast.style.display = 'block';
+  setTimeout(()=> { toast.style.display='none'; }, ms);
+}
+
+/* initial render */
+renderCart();
+
+/* ====== Music toggle with fade in/out ====== */
+const audio = document.getElementById('bgMusic');
+const switchEl = document.getElementById('switch');
+let isOn = false;
+let fadeInterval = null;
+const FADE_STEP = 0.06; // volume step
+
+switchEl.addEventListener('click', ()=>{
+  isOn = !isOn;
+  switchEl.classList.toggle('on', isOn);
+  if(isOn){
+    if(audio.querySelector('source') || audio.src){
+      // gradually fade in
+      audio.volume = 0.0;
+      audio.play().catch(()=>{ /* autoplay blocked */ });
+      if(fadeInterval) clearInterval(fadeInterval);
+      fadeInterval = setInterval(()=>{
+        if(audio.volume < 0.95) audio.volume = Math.min(1, audio.volume + FADE_STEP);
+        else clearInterval(fadeInterval);
+      }, 120);
+    } else {
+      alert('Para escuchar música coloca tu archivo en el elemento <audio id="bgMusic"> del HTML. Puedes usar mp3 o ogg.');
+      isOn = false;
+      switchEl.classList.remove('on');
+    }
+  } else {
+    if(fadeInterval) clearInterval(fadeInterval);
+    fadeInterval = setInterval(()=>{
+      if(audio.volume > 0.06) audio.volume = Math.max(0, audio.volume - FADE_STEP);
+      else { audio.pause(); clearInterval(fadeInterval); }
+    }, 120);
+  }
+});
+
+/* ====== Accessibility: keyboard close modal ====== */
+window.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && modal.style.display === 'flex') { modal.style.display = 'none'; modal.setAttribute('aria-hidden','true'); }
+});
+
+/* ====== small optimization: reduce drops on resize ====== */
+function adjustDrops(){
+  const w = window.innerWidth;
+  const children = dropsContainer.children;
+  const keep = Math.min(28, Math.max(6, Math.floor(w/36)));
+  for(let i=children.length-1;i>=keep;i--) children[i].remove();
+}
+window.addEventListener('resize', () => { adjustDrops(); });
+adjustDrops();
+
+/* ====== helper console hint ====== */
+console.log("PunKumayo PRO: para añadir música, en <audio id='bgMusic'> añade: <source src='ruta/tu-cancion.mp3' type='audio/mpeg'>");
+
+/* ====== Small UI polish: clicking card also animates & adds ====== */
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('click', (e)=>{
+    // avoid adding twice if pressing the Add button (handled separately)
+    if(e.target.classList.contains('add-to-cart')) return;
+    const id = card.getAttribute('data-id');
+    // subtle press animation
+    card.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}], {duration:320, easing:'cubic-bezier(.2,.8,.2,1)'});
+    // add
+    addToCart(id,1,true);
+  });
+});
+
+/* ====== End of script ====== */
+</script>
+</body>
+</html>
